@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.Replication;
+using Serilog;
 using System;
 using static ContactPro.Models.AppUser;
 
@@ -20,6 +21,19 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IValidator<AppUser>, AppUserValidator>();
+
+
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .WriteTo.Seq("http://localhost:5341"));
+
+//Creating a Logger
+/*Log.Logger = new LoggerConfiguration().ReadFrom
+    .Configuration("appsettings.json")
+    .CreateLogger();
+Log.Information("No one listens to me!");
+Log.CloseAndFlush()*/
+
 
 var app = builder.Build();
 

@@ -19,6 +19,37 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AddressBookTemplatev2\AddressBookTemplate\css\" />
+    <Folder Include="AddressBookTemplatev2\AddressBookTemplate\img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\site.css" />
+    <None Include="wwwroot\img\ClaudiaBlack.png" />
+    <None Include="wwwroot\img\ContactPro.png" />
+    <None Include="wwwroot\img\contactProLanding.png" />
+    <None Include="wwwroot\img\ContactProLight.png" />
+    <None Include="wwwroot\img\CourtenayTaylor.png" />
+    <None Include="wwwroot\img\DefaultContactImage.png" />
+    <None Include="wwwroot\img\FrankLangella.png" />
+    <None Include="wwwroot\img\GinaTorres.png" />
+    <None Include="wwwroot\img\LanceReddick.png" />
+    <None Include="wwwroot\img\MoiraQuirk.png" />
+    <None Include="wwwroot\img\NathanFillion.png" />
+    <None Include="wwwroot\img\NeilKaplan.png" />
+    <None Include="wwwroot\img\NolanNorth.png" />
+    <None Include="wwwroot\img\oops.png" />
+    <None Include="wwwroot\img\PageLeong.png" />
+    <None Include="wwwroot\img\ProfilePicPt.png" />
+    <None Include="wwwroot\img\ProfilePicSQ.png" />
+    <None Include="wwwroot\img\ProfilePicWS.png" />
   </ItemGroup>
 
 </Project>

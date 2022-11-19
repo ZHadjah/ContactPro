@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ContactPro.Data;
 using ContactPro.Models;
 using ContactPro.Areas.Identity.Pages.Account;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContactPro.Controllers
 {
@@ -20,21 +21,15 @@ namespace ContactPro.Controllers
             _context = context;
         }
 
-        // GET: Contacts
-        //If user is authenticated, show the list of contacts, else, send user to the login screen
+
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return View(await _context.Contacts.ToListAsync());
-            }
-            else
-            {
-                return View("Login.cshtml");
-            }
+            return View(await _context.Contacts.ToListAsync());
         }
 
         // GET: Contacts/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Contacts == null)
@@ -53,6 +48,7 @@ namespace ContactPro.Controllers
         }
 
         // GET: Contacts/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -75,6 +71,7 @@ namespace ContactPro.Controllers
         }
 
         // GET: Contacts/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contacts == null)
@@ -126,6 +123,7 @@ namespace ContactPro.Controllers
         }
 
         // GET: Contacts/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contacts == null)
