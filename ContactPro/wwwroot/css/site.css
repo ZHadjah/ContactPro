@@ -162,7 +162,7 @@ main {
 
 .footer {
     flex-shrink: 0;
-    background-color: var(--cf-secondaryColor);
+    background-color: var(--cf-primaryColorOffBlue);
 }
 
 .copyright {

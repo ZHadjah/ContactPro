@@ -9,7 +9,7 @@ namespace ContactPro.Models
     public class Contact
     {
         public int Id { get; set; }                        //PK
-        public int AppUserId { get; set; }                 //FK
+        public string? AppUserID { get; set; }                 //FK
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -44,16 +44,16 @@ namespace ContactPro.Models
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
 
-        //virtuals
-        public virtual AppUser? AppUser { get; set; }
-        public virtual ICollection<Category> Categories{ get; set; } = new HashSet<Category>();
+        //navigational properties
+        public AppUser? AppUser { get; set; }
+        public ICollection<Category> Categories{ get; set; } = new HashSet<Category>();
     }
 
     public class ContactValidator : AbstractValidator<Contact>
     {
         public ContactValidator()
         {
-            RuleFor(x => x.AppUserId).NotNull();
+            RuleFor(x => x.AppUserID).NotNull();
 
             RuleFor(x => x.FirstName).NotNull();
             RuleFor(x => x.FirstName).Length(3,50);

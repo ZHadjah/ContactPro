@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using ContactPro.Data;
 using ContactPro.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using ContactPro.Enums;
 
 namespace ContactPro.Controllers
 {

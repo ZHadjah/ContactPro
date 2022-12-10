@@ -7,6 +7,8 @@ using Npgsql.Replication;
 using Serilog;
 using System;
 using static ContactPro.Models.AppUser;
+using ContactPro.Services;
+using ContactPro.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,12 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .CreateLogger();
 Log.Information("No one listens to me!");
 Log.CloseAndFlush()*/
+
+
+//Registering Services
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAddressBookService, AddressbookService>();
+
 
 
 var app = builder.Build();
