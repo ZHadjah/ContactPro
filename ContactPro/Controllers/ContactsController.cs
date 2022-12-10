@@ -71,7 +71,10 @@ namespace ContactPro.Controllers
             //view data of all States created inside the Enums
             //StatesList is the name of the variable
             ViewData["StatesList"] = new SelectList(Enum.GetValues(typeof(States)).Cast<States>().ToList());
-            ViewData["CategoryList"] = new MultiSelectList(await _addressBookService.GetUserCategoriesAsync(appUserId), "Id", "Name");
+
+
+            //commenting this out for debugging purposes
+           ViewData["CategoryList"] = new MultiSelectList(await _addressBookService.GetUserCategoriesAsync(appUserId), "Id", "Name");
 
             return View();
         }
@@ -113,7 +116,6 @@ namespace ContactPro.Controllers
                     //save each category selected to the categories contactcategories table
                     await _addressBookService.AddContactToCategoryAsync(categoryId, contact.Id);
                 }
-
 
                 return RedirectToAction(nameof(Index));
             }

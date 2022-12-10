@@ -6,7 +6,7 @@ namespace ContactPro.Models
     public class Category
     {
         public int Id { get; set; }
-        public string AppUserId { get; set; }
+        public string? AppUserId { get; set; }
 
         [Display(Name = "Category Name")]
         public string? Name { get; set; }

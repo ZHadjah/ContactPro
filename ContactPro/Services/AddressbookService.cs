@@ -4,6 +4,8 @@ using ContactPro.Services;
 using ContactPro.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
+
+
 namespace ContactPro.Services;
 
 public class AddressbookService : IAddressBookService
@@ -54,6 +56,8 @@ public class AddressbookService : IAddressBookService
 
         try
         {
+            AppUser? test = await _context.Users.Where(user => user.Id == "2885f123-6e28-4b12-9b7f-b4159f8011dd");
+
             categories = await _context.Categories.Where(c => c.AppUserId == userId)
                                                   .OrderBy(c => c.Name).ToListAsync();
         }
