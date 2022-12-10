@@ -9,18 +9,31 @@ using ContactPro.Data;
 using ContactPro.Models;
 using ContactPro.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Authorization;
+using ContactPro.Enums;
+using Microsoft.AspNetCore.Identity;
+using ContactPro.Services.Interfaces;
+using ContactPro.Services;
+
 
 namespace ContactPro.Controllers
 {
     public class ContactsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IImageService _imageService;
+        private readonly IAddressBookService _addressBookService;
 
-        public ContactsController(ApplicationDbContext context)
+        public ContactsController(ApplicationDbContext context, 
+                                  UserManager<AppUser> userManager,
+                                  IImageService imageService,
+                                  IAddressBookService addressBookService)
         {
             _context = context;
+            _userManager = userManager;
+            _imageService = imageService;
+            _addressBookService = addressBookService;
         }
-
 
         [Authorize]
         public async Task<IActionResult> Index()
@@ -49,8 +62,17 @@ namespace ContactPro.Controllers
 
         // GET: Contacts/Create
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            //View Data is a gathering of unstructured data
+
+            string appUserId = _userManager.GetUserId(User);
+
+            //view data of all States created inside the Enums
+            //StatesList is the name of the variable
+            ViewData["StatesList"] = new SelectList(Enum.GetValues(typeof(States)).Cast<States>().ToList());
+            ViewData["CategoryList"] = new MultiSelectList(await _addressBookService.GetUserCategoriesAsync(appUserId), "Id", "Name");
+
             return View();
         }
 
@@ -59,15 +81,43 @@ namespace ContactPro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AppUserId,FirstName,LastName,BirthDate,Address1,Address2,Email,PhoneNumber,City,State,ZipCode,Created,ImageData,ImageType")] Contact contact)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BirthDate,Address1,Address2,Email,PhoneNumber,City,State,ZipCode,ImageFile")] Contact contact, List<int> CategoryList)
         {
+            //Remove AppUserId because the user doesn't need to type it into the form,
+            //so the program doesnt try to validate it
+            ModelState.Remove("AppUserID");
+
             if (ModelState.IsValid)
             {
+                contact.AppUserID = _userManager.GetUserId(User);
+                contact.Created = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+
+
+                if(contact.BirthDate != null)
+                {
+                    contact.BirthDate = DateTime.SpecifyKind(contact.BirthDate.Value, DateTimeKind.Utc);
+                }
+
+                if (contact.ImageFile != null)
+                {
+                    contact.ImageData = await _imageService.ConvertFileToByteArrayAsync(contact.ImageFile);
+                    contact.ImageType = contact.ImageFile.ContentType;
+                }
+
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
+
+                //loop over all the selected categories
+                foreach(int categoryId in CategoryList)
+                {
+                    //save each category selected to the categories contactcategories table
+                    await _addressBookService.AddContactToCategoryAsync(categoryId, contact.Id);
+                }
+
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Contacts/Edit/5
@@ -92,7 +142,7 @@ namespace ContactPro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AppUserId,FirstName,LastName,BirthDate,Address1,Address2,Email,PhoneNumber,City,State,ZipCode,Created,ImageData,ImageType")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,BirthDate,Address1,Address2,Email,PhoneNumber,City,State,ZipCode,Created,ImageData,ImageType")] Contact contact)
         {
             if (id != contact.Id)
             {

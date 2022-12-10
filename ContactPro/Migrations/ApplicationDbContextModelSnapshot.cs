@@ -115,10 +115,8 @@ namespace ContactPro.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("AppUserId1")
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -126,7 +124,7 @@ namespace ContactPro.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId1");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Categories");
                 });
@@ -145,10 +143,7 @@ namespace ContactPro.Migrations
                     b.Property<string>("Address2")
                         .HasColumnType("text");
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("AppUserId1")
+                    b.Property<string>("AppUserID")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("BirthDate")
@@ -186,7 +181,7 @@ namespace ContactPro.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId1");
+                    b.HasIndex("AppUserID");
 
                     b.ToTable("Contacts");
                 });
@@ -346,7 +341,9 @@ namespace ContactPro.Migrations
                 {
                     b.HasOne("ContactPro.Models.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId1");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
                 });
@@ -355,7 +352,7 @@ namespace ContactPro.Migrations
                 {
                     b.HasOne("ContactPro.Models.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId1");
+                        .HasForeignKey("AppUserID");
 
                     b.Navigation("AppUser");
                 });
